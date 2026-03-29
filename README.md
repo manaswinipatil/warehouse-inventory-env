@@ -1,3 +1,13 @@
+---
+title: Warehouse Inventory Env
+emoji: 🐢
+colorFrom: gray
+colorTo: red
+sdk: docker
+pinned: false
+license: mit
+---
+
 # Warehouse Inventory OpenEnv
 
 A real-world warehouse inventory management environment designed for agent training and evaluation with OpenEnv-style APIs. Features stochastic item spawning, dynamic obstacles, partial observability, weight-based battery dynamics, and 5 progressive difficulty tasks.
