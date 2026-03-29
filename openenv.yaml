@@ -1,0 +1,94 @@
+name: warehouse-inventory-env
+version: 1.0.0
+description: |
+  Warehouse inventory management environment with autonomous robot navigation,
+  dynamic orders, battery management, and obstacle avoidance. Models real-world
+  logistics operations similar to modern fulfillment centers.
+
+entrypoint: app:app
+
+observation_space:
+  type: ObservationModel
+  module: models
+  description: |
+    - robot_position: [x, y] coordinates
+    - robot_battery: battery level 0-1
+    - cargo_count: items currently carried
+    - inventory_grid: 10x10 map of item locations
+    - nearby_items: 5 closest items with positions
+    - task_progress: completion percentage
+    - time_remaining: normalized time left
+    - next_order_item: next required item ID (-1 if none)
+
+action_space:
+  type: ActionModel
+  module: models
+  description: |
+    - move_direction: 0=N, 1=E, 2=S, 3=W
+    - action_type: 0=move, 1=pickup, 2=dropoff
+    - target_item_id: encoded target item (0 maps to none, 1-9 maps to item 0-8)
+
+reward_space:
+  type: float
+  range: [-10.0, 20.0]
+
+tasks:
+  - id: 0
+    name: easy_navigation
+    description: Navigate to 3 randomly-placed item locations and collect them with partial observability
+    max_steps: 50
+    grader: EasyNavigationGrader
+    module: tasks
+    weight: 0.15
+
+  - id: 1
+    name: medium_pickup
+    description: Collect 5 items with dynamic orders, battery management, and partial observability (limited vision radius)
+    max_steps: 100
+    grader: MediumPickupGrader
+    module: tasks
+    weight: 0.2
+
+  - id: 2
+    name: hard_inventory
+    description: Full inventory management with 8 items, obstacles, orders, partial observability, and return-to-origin requirement
+    max_steps: 200
+    grader: HardInventoryGrader
+    module: tasks
+    weight: 0.25
+
+  - id: 3
+    name: very_hard_inventory
+    description: Extreme challenge with 10+ items, maze-like obstacles, heavy weights, weight-based battery drain, partial observability, and strict return requirement
+    max_steps: 250
+    grader: VeryHardInventoryGrader
+    module: tasks
+    weight: 0.2
+
+  - id: 4
+    name: extreme_inventory
+    description: Hardest task - 12 clustered items, dense maze pattern, very heavy weights, time pressure, and origin-return requirement
+    max_steps: 300
+    grader: ExtremeInventoryGrader
+    module: tasks
+    weight: 0.2
+
+api:
+  endpoints:
+    reset: POST /reset
+    step: POST /step
+    state: GET /state
+    tasks: GET /tasks
+    baseline: GET /baseline
+    grader: POST /grader
+    metrics: GET /metrics
+
+metadata:
+  version: "1.0.0"
+  author: "Warehouse AI Team"
+  license: "MIT"
+  tags: ["warehouse", "robotics", "inventory", "logistics", "openenv"]
+  real_world_parallels:
+    - "Amazon Robotics / Kiva Systems"
+    - "Ocado Technology"
+    - "Alibaba Smart Logistics"
