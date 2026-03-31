@@ -135,10 +135,18 @@ def baseline(num_episodes: int = 3) -> BaselineScores:
     easy = run_inference(task_id=0, num_episodes=num_episodes, verbose=False)
     medium = run_inference(task_id=1, num_episodes=num_episodes, verbose=False)
     hard = run_inference(task_id=2, num_episodes=num_episodes, verbose=False)
-    # Return average of all 5 tasks
-    overall = (easy + medium + hard) / 3.0
+    very_hard = run_inference(task_id=3, num_episodes=num_episodes, verbose=False)
+    extreme = run_inference(task_id=4, num_episodes=num_episodes, verbose=False)
+    overall = (easy + medium + hard + very_hard + extreme) / 5.0
 
-    return BaselineScores(easy=easy, medium=medium, hard=hard, overall=overall)
+    return BaselineScores(
+        easy=easy,
+        medium=medium,
+        hard=hard,
+        very_hard=very_hard,
+        extreme=extreme,
+        overall=overall,
+    )
 
 
 @app.post("/grader")

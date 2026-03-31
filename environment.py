@@ -30,11 +30,11 @@ class WarehouseInventoryEnv:
                 "robot_position": spaces.Box(low=0, high=max(self.grid_size), shape=(2,), dtype=np.float32),
                 "robot_battery": spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
                 "cargo_count": spaces.Box(low=0, high=5, shape=(1,), dtype=np.int32),
-                "inventory_grid": spaces.Box(low=0, high=10, shape=self.grid_size, dtype=np.int32),
+                "inventory_grid": spaces.Box(low=0, high=12, shape=self.grid_size, dtype=np.int32),
                 "nearby_items": spaces.Box(low=0, high=self.grid_size[0], shape=(5, 3), dtype=np.float32),
                 "task_progress": spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
                 "time_remaining": spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
-                "next_order_item": spaces.Box(low=-1, high=9, shape=(1,), dtype=np.int32),
+                "next_order_item": spaces.Box(low=-1, high=11, shape=(1,), dtype=np.int32),
             }
         )
 
@@ -42,7 +42,7 @@ class WarehouseInventoryEnv:
             {
                 "move_direction": spaces.Discrete(4),
                 "action_type": spaces.Discrete(3),
-                "target_item_id": spaces.Discrete(10),
+                "target_item_id": spaces.Discrete(13),
             }
         )
 

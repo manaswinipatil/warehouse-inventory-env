@@ -55,7 +55,7 @@ class ActionModel(BaseModel):
 
     move_direction: int = Field(..., ge=0, le=3)
     action_type: int = Field(..., ge=0, le=2)
-    target_item_id: int = Field(..., ge=0, le=9)
+    target_item_id: int = Field(..., ge=0, le=12)
 
     @field_validator("move_direction")
     @classmethod
@@ -149,7 +149,7 @@ class EnvironmentState(BaseModel):
 
 
 class GraderRequest(BaseModel):
-    task_id: int = Field(..., ge=0, le=2)
+    task_id: int = Field(..., ge=0, le=4)
     trajectory: List[Dict[str, Any]]
 
 
@@ -157,6 +157,8 @@ class BaselineScores(BaseModel):
     easy: float
     medium: float
     hard: float
+    very_hard: float
+    extreme: float
     overall: float
 
 

@@ -15,7 +15,7 @@ def test_api() -> None:
     resp = requests.get(f"{BASE_URL}/tasks")
     assert resp.status_code == 200
     data = resp.json()
-    assert len(data["tasks"]) == 3
+    assert len(data["tasks"]) == 5
     print("OK tasks endpoint")
 
     resp = requests.post(f"{BASE_URL}/reset?task_id=0&seed=42")
@@ -39,7 +39,9 @@ def test_api() -> None:
     resp = requests.get(f"{BASE_URL}/baseline?num_episodes=1")
     assert resp.status_code == 200
     scores = resp.json()
-    print(f"OK baseline endpoint, easy score: {scores['easy']:.3f}")
+    assert "very_hard" in scores
+    assert "extreme" in scores
+    print(f"OK baseline endpoint, overall score: {scores['overall']:.3f}")
 
     resp = requests.get(f"{BASE_URL}/metrics")
     assert resp.status_code == 200

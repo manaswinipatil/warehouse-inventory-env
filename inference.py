@@ -342,7 +342,7 @@ class InferenceAgent:
                         "role": "system",
                         "content": (
                             "You are a warehouse robot. Return strict JSON with keys "
-                            "move_direction (0-3), action_type (0-2), target_item_id (0-9)."
+                            "move_direction (0-3), action_type (0-2), target_item_id (0-12)."
                         ),
                     },
                     {"role": "user", "content": f"State: {obs_str}"},

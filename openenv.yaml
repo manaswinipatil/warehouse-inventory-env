@@ -10,27 +10,12 @@ entrypoint: app:app
 observation_space:
   type: ObservationModel
   module: models
-  description: |
-    - robot_position: [x, y] coordinates
-    - robot_battery: battery level 0-1
-    - cargo_count: items currently carried
-    - inventory_grid: 10x10 map of item locations
-    - nearby_items: 5 closest items with positions
-    - task_progress: completion percentage
-    - time_remaining: normalized time left
-    - next_order_item: next required item ID (-1 if none)
 
 action_space:
   type: ActionModel
   module: models
-  description: |
-    - move_direction: 0=N, 1=E, 2=S, 3=W
-    - action_type: 0=move, 1=pickup, 2=dropoff
-    - target_item_id: encoded target item (0 maps to none, 1-9 maps to item 0-8)
 
-reward_space:
-  type: float
-  range: [-10.0, 20.0]
+reward_space: float
 
 tasks:
   - id: 0
@@ -73,22 +58,3 @@ tasks:
     module: tasks
     weight: 0.2
 
-api:
-  endpoints:
-    reset: POST /reset
-    step: POST /step
-    state: GET /state
-    tasks: GET /tasks
-    baseline: GET /baseline
-    grader: POST /grader
-    metrics: GET /metrics
-
-metadata:
-  version: "1.0.0"
-  author: "Warehouse AI Team"
-  license: "MIT"
-  tags: ["warehouse", "robotics", "inventory", "logistics", "openenv"]
-  real_world_parallels:
-    - "Amazon Robotics / Kiva Systems"
-    - "Ocado Technology"
-    - "Alibaba Smart Logistics"
