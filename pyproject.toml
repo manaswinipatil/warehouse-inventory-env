@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A real-world warehouse inventory management environment designed for agent training and evaluation with OpenEnv-style APIs"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [{name = "Manaswini Patil"}]
 keywords = ["warehouse", "inventory", "environment", "rl", "agent", "openenv"]
 classifiers = [
@@ -16,7 +16,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
@@ -31,7 +30,11 @@ dependencies = [
     "openai>=1.0.0",
     "httpx>=0.25.0",
     "requests>=2.31.0",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+warehouse-server = "server.app:app"
 
 [project.optional-dependencies]
 dev = [
@@ -46,7 +49,8 @@ Repository = "https://github.com/manaswinipatil/warehouse-inventory-env.git"
 Documentation = "https://huggingface.co/spaces/Manaswinipatil/warehouse-inventory-env"
 
 [tool.setuptools]
-py-modules = ["app", "environment", "inference", "models", "tasks"]
+packages = ["server"]
+py-modules = ["environment", "inference", "models", "tasks"]
 
 [tool.black]
 line-length = 100
