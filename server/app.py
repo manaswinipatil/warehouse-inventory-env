@@ -189,3 +189,13 @@ def _to_serializable(value: Any) -> Any:
     if isinstance(value, list):
         return [_to_serializable(v) for v in value]
     return value
+
+
+def main() -> None:
+    """Entry point for the warehouse inventory server."""
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+if __name__ == "__main__":
+    main()

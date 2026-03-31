@@ -34,7 +34,7 @@ dependencies = [
 ]
 
 [project.scripts]
-warehouse-server = "server.app:app"
+warehouse-server = "server.app:main"
 
 [project.optional-dependencies]
 dev = [
