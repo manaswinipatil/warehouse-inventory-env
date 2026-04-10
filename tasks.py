@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Set, Tuple
 import numpy as np
 
 
-def _strict_score(value: float, epsilon: float = 1e-6) -> float:
+def _strict_score(value: float, epsilon: float = 1e-3) -> float:
     return float(min(1.0 - epsilon, max(epsilon, float(value))))
 
 

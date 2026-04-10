@@ -84,6 +84,10 @@ GRADERS = {
 }
 
 
+def _strict_score(value: float, epsilon: float = 1e-3) -> float:
+    return float(min(1.0 - epsilon, max(epsilon, float(value))))
+
+
 @app.get("/")
 def root() -> Dict[str, Any]:
     return {
@@ -155,7 +159,7 @@ def grader(request: GraderRequest) -> Dict[str, float]:
     if grader_impl is None:
         raise HTTPException(status_code=400, detail="Unsupported task_id")
 
-    score = grader_impl.grade(request.trajectory)
+    score = _strict_score(grader_impl.grade(request.trajectory))
     return {"task_id": request.task_id, "score": float(score)}
 
 

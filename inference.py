@@ -68,6 +68,10 @@ def emit_end(task: str, score: float, steps: int) -> None:
     )
 
 
+def _strict_score(value: float, epsilon: float = 1e-3) -> float:
+    return float(min(1.0 - epsilon, max(epsilon, float(value))))
+
+
 class InferenceAgent:
     """Inference agent for environment evaluation."""
 
@@ -451,7 +455,7 @@ def run_inference(
         if verbose:
             print(f"Episode {episode + 1}: Reward={total_reward:.2f}, Score={score:.3f}")
 
-    avg_score = float(np.mean(total_scores)) if total_scores else 0.0
+    avg_score = _strict_score(float(np.mean(total_scores)) if total_scores else 0.0)
     if verbose:
         print(f"\nAverage score for task {task_id}: {avg_score:.3f}")
 
