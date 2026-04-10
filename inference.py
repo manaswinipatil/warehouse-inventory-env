@@ -18,6 +18,12 @@ random.seed(42)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
+HF_TOKEN = os.getenv("HF_TOKEN", "")
+LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME", "")
+
+# Accept HF_TOKEN as a fallback API key for hosted runtimes that expose only this variable.
+if not OPENAI_API_KEY and HF_TOKEN:
+    OPENAI_API_KEY = HF_TOKEN
 
 
 def emit_start(task: str) -> None:
