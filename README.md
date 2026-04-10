@@ -159,6 +159,17 @@ The baseline script supports the required variables:
 - `MODEL_NAME` — Model identifier (default: gpt-4o-mini)
 - `HF_TOKEN` — Hugging Face token (for deployment)
 
+Behavior notes:
+- `OPENAI_API_KEY` is used first for OpenAI client calls.
+- If `OPENAI_API_KEY` is not set, `HF_TOKEN` is used as a fallback key.
+- Do not hardcode API keys in source code; set them as Space secrets/environment variables.
+
+For OpenEnv validator compatibility, `inference.py` emits strict structured stdout lines:
+- `[START] task=NAME`
+- `[STEP] step=1 reward=0.500000`
+- `[END] task=NAME score=0.950000 steps=1`
+- Output is printed to stdout with `flush=True`.
+
 If OpenAI client is unavailable, the script uses a deterministic heuristic baseline.
 
 ## Docker
@@ -174,11 +185,12 @@ docker run -p 7860:7860 warehouse-inventory-env
 
 - Use Docker Space type
 - Ensure container exposes port 7860
-- Provide required secrets in Space settings:
+- Provide required variables/secrets in Space settings:
   - `OPENAI_API_KEY`
   - `API_BASE_URL`
   - `MODEL_NAME`
   - `HF_TOKEN`
+  - `LOCAL_IMAGE_NAME` (optional, only if your workflow uses it)
 
 ## Reproducibility
 
