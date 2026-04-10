@@ -20,6 +20,24 @@ MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
 
 
+def emit_start(task: str) -> None:
+    # Required by evaluator: structured START line on stdout.
+    print(f"[START] task={task}", flush=True)
+
+
+def emit_step(step: int, reward: float) -> None:
+    # Required by evaluator: structured STEP line with stable field names/order.
+    print(f"[STEP] step={int(step)} reward={float(reward):.6f}", flush=True)
+
+
+def emit_end(task: str, score: float, steps: int) -> None:
+    # Required by evaluator: structured END line on stdout.
+    print(
+        f"[END] task={task} score={float(score):.6f} steps={int(steps)}",
+        flush=True,
+    )
+
+
 class InferenceAgent:
     """Inference agent for environment evaluation."""
 
@@ -411,10 +429,6 @@ def run_inference(
 
 
 if __name__ == "__main__":
-    print("=" * 60)
-    print("WAREHOUSE INVENTORY ENVIRONMENT - INFERENCE EVALUATION")
-    print("=" * 60)
-
     scores: List[float] = []
     task_names = [
         "Easy Navigation",
@@ -425,15 +439,9 @@ if __name__ == "__main__":
     ]
 
     for task_id in range(5):
-        print(f"\nTask {task_id + 1}: {task_names[task_id]}")
-        print("-" * 40)
-        score = run_inference(task_id, num_episodes=2)  # 2 episodes for speed
+        task_name = task_names[task_id]
+        emit_start(task_name)
+        score = run_inference(task_id, num_episodes=2, verbose=False)  # 2 episodes for speed
+        emit_step(1, score)
+        emit_end(task_name, score, 1)
         scores.append(score)
-
-    print("\n" + "=" * 60)
-    print("FINAL SCORES:")
-    print("=" * 60)
-    for i, name in enumerate(task_names):
-        print(f"{name:25s}: {scores[i]:.3f}")
-    print(f"\n{'OVERALL':25s}: {float(np.mean(scores)):.3f}")
-    print("=" * 60)
