@@ -3,6 +3,10 @@ from typing import Any, Dict, List, Set, Tuple
 import numpy as np
 
 
+def _strict_score(value: float, epsilon: float = 1e-6) -> float:
+    return float(min(1.0 - epsilon, max(epsilon, float(value))))
+
+
 class TaskGrader:
     """Base class for deterministic task graders."""
 
@@ -15,7 +19,7 @@ class EasyNavigationGrader(TaskGrader):
 
     def grade(self, trajectory: List[Dict[str, Any]]) -> float:
         if not trajectory:
-            return 0.0
+            return _strict_score(0.0)
 
         collected_items: Set[int] = set()
         for step in trajectory:
@@ -25,7 +29,7 @@ class EasyNavigationGrader(TaskGrader):
                 if item_id is not None:
                     collected_items.add(int(item_id))
 
-        return len(collected_items) / 3.0
+        return _strict_score(len(collected_items) / 3.0)
 
 
 class MediumPickupGrader(TaskGrader):
@@ -33,7 +37,7 @@ class MediumPickupGrader(TaskGrader):
 
     def grade(self, trajectory: List[Dict[str, Any]]) -> float:
         if not trajectory:
-            return 0.0
+            return _strict_score(0.0)
 
         collected_items: Set[int] = set()
         delivered_items: Set[int] = set()
@@ -56,7 +60,7 @@ class MediumPickupGrader(TaskGrader):
         battery_score = avg_battery
 
         score = 0.4 * collection_score + 0.4 * delivery_score + 0.2 * battery_score
-        return min(1.0, max(0.0, score))
+        return _strict_score(score)
 
 
 class HardInventoryGrader(TaskGrader):
@@ -64,7 +68,7 @@ class HardInventoryGrader(TaskGrader):
 
     def grade(self, trajectory: List[Dict[str, Any]]) -> float:
         if not trajectory:
-            return 0.0
+            return _strict_score(0.0)
 
         delivered_items: Set[int] = set()
         total_value = 0.0
@@ -89,7 +93,7 @@ class HardInventoryGrader(TaskGrader):
         return_bonus = 1.0 if final_position == (0.0, 0.0) else 0.0
 
         score = 0.5 * completion_score + 0.3 * value_score + 0.2 * return_bonus
-        return min(1.0, max(0.0, score))
+        return _strict_score(score)
 
 
 class VeryHardInventoryGrader(TaskGrader):
@@ -97,7 +101,7 @@ class VeryHardInventoryGrader(TaskGrader):
 
     def grade(self, trajectory: List[Dict[str, Any]]) -> float:
         if not trajectory:
-            return 0.0
+            return _strict_score(0.0)
 
         delivered_items: Set[int] = set()
         total_value = 0.0
@@ -124,7 +128,7 @@ class VeryHardInventoryGrader(TaskGrader):
         efficiency_penalty = min(0.3, episodes_to_complete / 250.0)
 
         score = 0.45 * completion_score + 0.35 * value_score + 0.2 * return_bonus - efficiency_penalty
-        return min(1.0, max(0.0, score))
+        return _strict_score(score)
 
 
 class ExtremeInventoryGrader(TaskGrader):
@@ -132,7 +136,7 @@ class ExtremeInventoryGrader(TaskGrader):
 
     def grade(self, trajectory: List[Dict[str, Any]]) -> float:
         if not trajectory:
-            return 0.0
+            return _strict_score(0.0)
 
         delivered_items: Set[int] = set()
         total_value = 0.0
@@ -159,4 +163,4 @@ class ExtremeInventoryGrader(TaskGrader):
         efficiency_bonus = max(0.0, 1.0 - total_steps / 300.0)
 
         score = 0.4 * completion_score + 0.35 * value_score + 0.15 * return_bonus + 0.1 * efficiency_bonus
-        return min(1.0, max(0.0, score))
+        return _strict_score(score)
